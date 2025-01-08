@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+	
+	@State var group: Group = .preview
+	
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+		NavigationStack {
+			GroupGameListView(group: $group)
+		}
     }
+	
 }
 
 #Preview {
