@@ -9,12 +9,8 @@ import SwiftUI
 
 struct NewGameView: View {
 	
-	@Binding var groupLocations: [InPersonLocation]
-	@Binding var groupPlayers: [Player]
-	@Binding var groupFactions: [Faction]
-	
-	@Binding var groupGames: [Game]
-	
+	@Environment(Group.self) var group: Group
+		
 	@State private var date: Date = .now
 	@State private var location: Location? = nil
 	@State private var records: [Game.PlayerRecord] = []
@@ -61,7 +57,6 @@ struct NewGameView: View {
 				
 				LabeledContent("Location") {
 					LocationSelectionMenu(
-						groupLocations: $groupLocations,
 						selectedLocation: $location
 					)
 				}
@@ -70,9 +65,6 @@ struct NewGameView: View {
 			
 			Section("Players") {
 				GameRecordsEditView(
-					groupLocations: $groupLocations,
-					groupPlayers: $groupPlayers,
-					groupFactions: $groupFactions,
 					records: $records
 				)
 			}
@@ -99,7 +91,7 @@ struct NewGameView: View {
 			assertionFailure("Game must be valid to be added.")
 			return
 		}
-		groupGames.append(game)
+		group.games.append(game)
 		dismiss()
 	}
 	
@@ -107,17 +99,11 @@ struct NewGameView: View {
 
 #Preview {
 	
-	@Previewable @State var groupLocations: [InPersonLocation] = .preview
-	@Previewable @State var groupPlayers: [Player] = .preview
-	@Previewable @State var groupFactions: [Faction] = .preview
+	@Previewable @State var group: Group = .preview
 	
-	@Previewable @State var groupGames: [Game] = Group.preview.games
-	
-	NewGameView(
-		groupLocations: $groupLocations,
-		groupPlayers: $groupPlayers,
-		groupFactions: $groupFactions,
-		groupGames: $groupGames
-	)
+	NavigationStack {
+		NewGameView()
+	}
+	.environment(group)
 	
 }

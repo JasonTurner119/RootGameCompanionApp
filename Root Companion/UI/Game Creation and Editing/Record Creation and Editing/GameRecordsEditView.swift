@@ -9,9 +9,7 @@ import SwiftUI
 
 struct GameRecordsEditView: View {
 	
-	@Binding var groupLocations: [InPersonLocation]
-	@Binding var groupPlayers: [Player]
-	@Binding var groupFactions: [Faction]
+	@Environment(Group.self) var group: Group
 	
 	@Binding var records: [Game.PlayerRecord]
 	
@@ -23,9 +21,6 @@ struct GameRecordsEditView: View {
 			NavigationLink(
 				destination: {
 					RecordEditView(
-						groupLocations: $groupLocations,
-						groupPlayers: $groupPlayers,
-						groupFactions: $groupFactions,
 						record: record
 					)
 				},
@@ -49,9 +44,6 @@ struct GameRecordsEditView: View {
 		}
 		.navigationDestination(isPresented: $isShowingAddPlayerForm) {
 			RecordCreationView(
-				groupLocations: $groupLocations,
-				groupPlayers: $groupPlayers,
-				groupFactions: $groupFactions,
 				gameRecords: $records
 			)
 		}
@@ -66,21 +58,16 @@ struct GameRecordsEditView: View {
 
 #Preview {
 	
-	@Previewable @State var groupLocations: [InPersonLocation] = .preview
-	@Previewable @State var groupPlayers: [Player] = .preview
-	@Previewable @State var groupFactions: [Faction] = .preview
-	
+	@Previewable @State var group: Group = .preview
 	@Previewable @State var records: [Game.PlayerRecord] = []
 	
 	NavigationStack {
 		Form {
 			GameRecordsEditView(
-				groupLocations: $groupLocations,
-				groupPlayers: $groupPlayers,
-				groupFactions: $groupFactions,
 				records: $records
 			)
 		}
 	}
+	.environment(group)
 	
 }

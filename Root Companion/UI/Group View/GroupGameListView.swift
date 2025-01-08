@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroupGameListView: View {
 	
-	@Binding var group: Group
+	@Environment(Group.self) private var group: Group
 	
 	@State private var isPresentingNewGameView = false
 	
@@ -31,12 +31,7 @@ struct GroupGameListView: View {
 			}
 		})
 		.navigationDestination(isPresented: $isPresentingNewGameView) {
-			NewGameView(
-				groupLocations: $group.locations,
-				groupPlayers: $group.players,
-				groupFactions: $group.factions,
-				groupGames: $group.games
-			)
+			NewGameView()
 		}
     }
 	
@@ -47,7 +42,8 @@ struct GroupGameListView: View {
 	@Previewable @State var group: Group = .preview
 	
 	NavigationStack {
-		GroupGameListView(group: $group)
+		GroupGameListView()
+			.environment(group)
 	}
 	
 }

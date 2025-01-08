@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayerSelectionMenu: View {
 	
-	@Binding var groupPlayers: [Player]
+	@Environment(Group.self) private var group: Group
 	let gamePlayers: [Player]
 	@Binding var selectedPlayer: Player?
 	@State var isPresentingNewPlayerView = false
@@ -24,7 +24,7 @@ struct PlayerSelectionMenu: View {
 			
 			Divider()
 			
-			ForEach(groupPlayers) { player in
+			ForEach(group.players) { player in
 				Toggle(isOn: selectedPlayer(is: player)) {
 					Text(player.name)
 				}
@@ -69,15 +69,15 @@ struct PlayerSelectionMenu: View {
 
 #Preview {
 	
-	@Previewable @State var groupPlayers: [Player] = .preview
+	@Previewable @State var group: Group = .preview
 	@Previewable @State var selectedPlayer: Player? = nil
 	
 	NavigationStack {
 		PlayerSelectionMenu(
-			groupPlayers: $groupPlayers,
 			gamePlayers: [],
 			selectedPlayer: $selectedPlayer
 		)
 	}
+	.environment(group)
 	
 }

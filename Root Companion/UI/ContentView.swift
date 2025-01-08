@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
 	
-	@State var group: Group = .preview
+	@State private var group: Group = .preview
 	
     var body: some View {
 		NavigationStack {
-			GroupGameListView(group: $group)
+			GroupGameListView()
 		}
+		.environment(group)
     }
 	
 }

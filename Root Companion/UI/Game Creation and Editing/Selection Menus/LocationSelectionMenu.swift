@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationSelectionMenu: View {
 	
-	@Binding var groupLocations: [InPersonLocation]
+	@Environment(Group.self) var group: Group
 	@Binding var selectedLocation: Location?
 	
 	@State private var isPresentingNewLocationView = false
@@ -26,7 +26,7 @@ struct LocationSelectionMenu: View {
 			
 			Divider()
 			
-			ForEach(groupLocations) { location in
+			ForEach(group.locations) { location in
 				Toggle(
 					location.name,
 					isOn: $selectedLocation[
@@ -51,9 +51,7 @@ struct LocationSelectionMenu: View {
 		}
 		.menuOrder(.fixed)
 		.navigationDestination(isPresented: $isPresentingNewLocationView) {
-			LocationCreationView(
-				groupLocations: $groupLocations
-			)
+			LocationCreationView()
 		}
 		
     }
@@ -88,14 +86,14 @@ extension Location? {
 
 #Preview {
 	
-	@Previewable @State var groupLocations: [InPersonLocation] = .preview
+	@Previewable @State var group: Group = .preview
 	@Previewable @State var selectedLocation: Location? = nil
 	
 	NavigationStack {
 		LocationSelectionMenu(
-			groupLocations: $groupLocations,
 			selectedLocation: $selectedLocation
 		)
 	}
+	.environment(group)
 	
 }

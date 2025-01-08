@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct LocationCreationView: View {
-	
-	@Binding var groupLocations: [InPersonLocation]
-	
     var body: some View {
 		NotYetImplementedView()
 			.navigationTitle("Create New Location")
@@ -19,10 +16,6 @@ struct LocationCreationView: View {
 
 #Preview {
 	
-	@Previewable @State var groupLocations: [InPersonLocation] = []
-	
-	LocationCreationView(
-		groupLocations: $groupLocations
-	)
+	LocationCreationView()
 	
 }
