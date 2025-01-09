@@ -117,6 +117,5 @@ struct RecordCreationView: View {
 			gameRecords: $gameRecords
 		)
 	}
-	.environment(group)
 	
 }

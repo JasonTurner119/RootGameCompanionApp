@@ -70,6 +70,5 @@ struct GameRecordsEditView: View {
 			)
 		}
 	}
-	.environment(group)
 	
 }
