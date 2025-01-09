@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Game: Identifiable {
-	let id = UUID()
-	let name: String?
-	let location: Location?
-	let date: Date?
-	let playerRecords: [PlayerRecord]
+struct Game: Identifiable, Codable {
+	var id: UUID
+	var name: String?
+	var location: Location?
+	var date: Date?
+	var playerRecords: [PlayerRecord]
 }
 
 extension Game {
-	struct PlayerRecord: Identifiable {
-		let player: Player
-		let faction: Faction
-		let score: Score
-		let didWin: Bool
+	struct PlayerRecord: Identifiable, Codable {
+		var player: Player
+		var faction: Faction
+		var score: Score
+		var didWin: Bool
 		var id: UUID { player.id }
 	}
 }
@@ -95,6 +95,7 @@ extension [Game] {
 	static var preview: [Game] {
 		[
 			Game(
+				id: UUID(uuidString: "8074a1c2-a24b-492f-8edc-616641883b4b")!,
 				name: "Game 1",
 				location: .online,
 				date: Date(),
@@ -126,6 +127,7 @@ extension [Game] {
 				]
 			),
 			Game(
+				id: UUID(uuidString: "5e9f3add-c615-4c9e-bad7-2c40032e4816")!,
 				name: "Game 2",
 				location: .online,
 				date: Date(),
@@ -157,6 +159,7 @@ extension [Game] {
 				]
 			),
 			Game(
+				id: UUID(uuidString: "cdacb536-3527-4163-a30c-ae857572a53f")!,
 				name: "Game 3",
 				location: .online,
 				date: Date(),

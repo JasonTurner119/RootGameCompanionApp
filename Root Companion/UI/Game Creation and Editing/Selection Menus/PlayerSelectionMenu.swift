@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayerSelectionMenu: View {
 	
-	@Environment(Group.self) private var group: Group
+	@Bindable var group: Group
 	let gamePlayers: [Player]
 	@Binding var selectedPlayer: Player?
 	@State var isPresentingNewPlayerView = false
@@ -69,15 +69,15 @@ struct PlayerSelectionMenu: View {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
 	@Previewable @State var selectedPlayer: Player? = nil
+	let group: Group = .preview
 	
 	NavigationStack {
 		PlayerSelectionMenu(
+			group: group,
 			gamePlayers: [],
 			selectedPlayer: $selectedPlayer
 		)
 	}
-	.environment(group)
 	
 }

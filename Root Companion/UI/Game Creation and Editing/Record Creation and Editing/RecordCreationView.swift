@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecordCreationView: View {
 	
-	@Environment(Group.self) private var group: Group
+	@Bindable var group: Group
 	
 	@Binding var gameRecords: [Game.PlayerRecord]
 	
@@ -34,6 +34,7 @@ struct RecordCreationView: View {
 			Section {
 				LabeledContent("Player") {
 					PlayerSelectionMenu(
+						group: group,
 						gamePlayers: gameRecords.map(\.player),
 						selectedPlayer: $player
 					)
@@ -41,6 +42,7 @@ struct RecordCreationView: View {
 				
 				LabeledContent("Faction") {
 					FactionSelectionMenu(
+						group: group,
 						gameFactions: gameRecords.map(\.faction),
 						selectedFaction: $faction
 					)
@@ -106,11 +108,12 @@ struct RecordCreationView: View {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
 	@Previewable @State var gameRecords: [Game.PlayerRecord] = []
+	let group: Group = .preview
 	
 	NavigationStack {
 		RecordCreationView(
+			group: group,
 			gameRecords: $gameRecords
 		)
 	}

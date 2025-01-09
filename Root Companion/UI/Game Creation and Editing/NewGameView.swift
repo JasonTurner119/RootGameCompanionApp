@@ -9,8 +9,9 @@ import SwiftUI
 
 struct NewGameView: View {
 	
-	@Environment(Group.self) var group: Group
-		
+	@Bindable var group: Group
+	
+	private let gameId = UUID()
 	@State private var date: Date = .now
 	@State private var location: Location? = nil
 	@State private var records: [Game.PlayerRecord] = []
@@ -23,6 +24,7 @@ struct NewGameView: View {
 	
 	private var game: Game {
 		Game(
+			id: gameId,
 			name: nil,
 			location: location,
 			date: date,
@@ -57,6 +59,7 @@ struct NewGameView: View {
 				
 				LabeledContent("Location") {
 					LocationSelectionMenu(
+						group: group,
 						selectedLocation: $location
 					)
 				}
@@ -65,6 +68,7 @@ struct NewGameView: View {
 			
 			Section("Players") {
 				GameRecordsEditView(
+					group: group,
 					records: $records
 				)
 			}
@@ -99,11 +103,10 @@ struct NewGameView: View {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
+	let group: Group = .preview
 	
 	NavigationStack {
-		NewGameView()
+		NewGameView(group: group)
 	}
-	.environment(group)
 	
 }

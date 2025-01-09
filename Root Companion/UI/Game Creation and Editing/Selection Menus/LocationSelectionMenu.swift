@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationSelectionMenu: View {
 	
-	@Environment(Group.self) var group: Group
+	@Bindable var group: Group
 	@Binding var selectedLocation: Location?
 	
 	@State private var isPresentingNewLocationView = false
@@ -86,14 +86,14 @@ extension Location? {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
 	@Previewable @State var selectedLocation: Location? = nil
+	let group: Group = .preview
 	
 	NavigationStack {
 		LocationSelectionMenu(
+			group: group,
 			selectedLocation: $selectedLocation
 		)
 	}
-	.environment(group)
 	
 }

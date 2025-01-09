@@ -5,9 +5,10 @@
 //  Created by Jason Turner on 12/28/24.
 //
 
-import SwiftUI
+import Foundation
+import SwiftData
 
-@Observable
+@Model
 class Group {
 	
 	var id: UUID
@@ -30,7 +31,7 @@ class Group {
 
 extension Group {
 	static let preview: Group = Group(
-		id: UUID(),
+		id: UUID(uuidString: "f8cc2a5f-5098-47ec-84af-70e3c221988f")!,
 		name: "Root 66",
 		games: .preview,
 		locations: .preview,

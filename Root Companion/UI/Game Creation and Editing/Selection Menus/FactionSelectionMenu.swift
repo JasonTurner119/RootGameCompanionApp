@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FactionSelectionMenu: View {
 	
-	@Environment(Group.self) var group: Group
+	@Bindable var group: Group
 	let gameFactions: [Faction]
 	@Binding var selectedFaction: Faction?
 	
@@ -73,15 +73,15 @@ extension Faction? {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
 	@Previewable @State var selectedFaction: Faction? = nil
+	let group: Group = .preview
 	
 	NavigationStack {
 		FactionSelectionMenu(
+			group: group,
 			gameFactions: [],
 			selectedFaction: $selectedFaction
 		)
 	}
-	.environment(group)
 	
 }

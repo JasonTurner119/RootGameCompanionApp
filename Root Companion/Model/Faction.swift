@@ -8,17 +8,45 @@
 import Foundation
 import SwiftUICore
 
-struct Faction: Identifiable, Hashable {
-	let id = UUID()
-	let name: String
-	let color: Color
+struct Faction: Identifiable, Hashable, Codable {
+	
+	var id: UUID
+	var name: String
+	private var colorComponents: ColorComponents
+	var color: Color {
+		get { colorComponents.color }
+		set { colorComponents = .fromColor(newValue) }
+	}
+	
+	init(id: UUID, name: String, color: Color) {
+		self.id = id
+		self.name = name
+		self.colorComponents = .fromColor(color)
+	}
+	
 }
 
 extension Faction {
-	static let marquiseDeCat = Faction(name: "Marquise de Cat", color: .orange)
-	static let eyrieDynasties = Faction(name: "Eyrie Dynasties", color: .blue)
-	static let woodlandAlliance = Faction(name: "Woodland Alliance", color: .green)
-	static let vagabond = Faction(name: "Vagabond", color: .gray)
+	static let marquiseDeCat = Faction(
+		id: UUID(uuidString: "a5603cc9-ca71-480e-935b-0ddb1b734404")!,
+		name: "Marquise de Cat",
+		color: .orange
+	)
+	static let eyrieDynasties = Faction(
+		id: UUID(uuidString: "6a1d0478-9325-4ab8-9640-2d64c8990bc1")!,
+		name: "Eyrie Dynasties",
+		color: .blue
+	)
+	static let woodlandAlliance = Faction(
+		id: UUID(uuidString: "ed6ca159-e85e-44c4-b99d-5c1ed01ad8e4")!,
+		name: "Woodland Alliance",
+		color: .green
+	)
+	static let vagabond = Faction(
+		id: UUID(uuidString: "eacdcc71-9df2-443c-b5b2-c633b3d6fe3d")!,
+		name: "Vagabond",
+		color: .gray
+	)
 }
 
 extension [Faction] {

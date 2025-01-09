@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameRecordsEditView: View {
 	
-	@Environment(Group.self) var group: Group
+	@Bindable var group: Group
 	
 	@Binding var records: [Game.PlayerRecord]
 	
@@ -44,6 +44,7 @@ struct GameRecordsEditView: View {
 		}
 		.navigationDestination(isPresented: $isShowingAddPlayerForm) {
 			RecordCreationView(
+				group: group,
 				gameRecords: $records
 			)
 		}
@@ -58,12 +59,13 @@ struct GameRecordsEditView: View {
 
 #Preview {
 	
-	@Previewable @State var group: Group = .preview
 	@Previewable @State var records: [Game.PlayerRecord] = []
+	let group: Group = .preview
 	
 	NavigationStack {
 		Form {
 			GameRecordsEditView(
+				group: group,
 				records: $records
 			)
 		}

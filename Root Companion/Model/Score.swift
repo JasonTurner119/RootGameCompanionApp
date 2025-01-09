@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Score: Hashable {
+enum Score: Hashable, Codable {
 	case points(Int)
 	case dominance
 }
