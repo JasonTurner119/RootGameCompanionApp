@@ -14,7 +14,7 @@ struct PlayerRecordSummaryView: View {
 	
     var body: some View {
 		
-		let sorted = playerRecords.sorted(by: playerSorter)
+		let sorted = playerRecords.sorted(by: { playerSorter(first: $0, second: $1) })
 		
 		HStack(spacing: 0) {
 			ForEach(sorted) { playerRecord in

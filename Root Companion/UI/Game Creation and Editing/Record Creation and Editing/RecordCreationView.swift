@@ -9,7 +9,7 @@ import SwiftUI
 import XCTestDynamicOverlay
 
 @MainActor
-class RecordCreationModel: ObservableObject {
+final class RecordCreationModel: ObservableObject {
 	
 	@ObservedObject var group: ObservedGroup
 	let disabledPlayers: [Player]

@@ -10,7 +10,7 @@ import SwiftUINavigation
 import Combine
 
 @MainActor
-class GroupDetailModel: ObservableObject {
+final class GroupDetailModel: ObservableObject {
 	
 	@Published var destination: Destination?
 	@ObservedObject var group: ObservedGroup

@@ -11,7 +11,7 @@ import IdentifiedCollections
 import Combine
 
 @MainActor
-class GroupListModel: ObservableObject {
+final class GroupListModel: ObservableObject {
 	
 	@Published var destination: Destination?
 	@Published var groups: IdentifiedArrayOf<ObservedGroup> = [

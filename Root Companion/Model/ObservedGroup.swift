@@ -8,7 +8,7 @@
 import Combine
 
 @dynamicMemberLookup
-class ObservedGroup: ObservableObject, Identifiable {
+final class ObservedGroup: ObservableObject, Identifiable {
 	@Published var group: Group
 	init(group: Group) {
 		self.group = group

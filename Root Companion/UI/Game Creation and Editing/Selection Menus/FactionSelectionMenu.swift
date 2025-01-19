@@ -8,7 +8,8 @@
 import SwiftUI
 import SwiftUINavigation
 
-class FactionSelectionMenuModel: ObservableObject {
+@MainActor
+final class FactionSelectionMenuModel: ObservableObject {
 	
 	@Published var destination: Destination?
 	@ObservedObject var group: ObservedGroup

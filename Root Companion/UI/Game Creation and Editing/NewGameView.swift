@@ -8,7 +8,8 @@
 import SwiftUI
 import SwiftUINavigation
 
-class NewGameModel: ObservableObject {
+@MainActor
+final class NewGameModel: ObservableObject {
 	
 	@Published var destination: Destination? {
 		didSet { self.bind() }

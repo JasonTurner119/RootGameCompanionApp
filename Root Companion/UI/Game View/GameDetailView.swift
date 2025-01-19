@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-class GameDetailModel: ObservableObject {
+final class GameDetailModel: ObservableObject {
 	
 	let game: Game
 	@Published var infoDisplayStyle: InfoDisplayStyle
