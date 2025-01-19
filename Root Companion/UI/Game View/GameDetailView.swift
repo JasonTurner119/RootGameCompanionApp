@@ -8,10 +8,12 @@
 import SwiftUI
 import Charts
 
-final class GameDetailModel: ObservableObject {
+@MainActor
+@Observable
+final class GameDetailModel {
 	
 	let game: Game
-	@Published var infoDisplayStyle: InfoDisplayStyle
+	var infoDisplayStyle: InfoDisplayStyle
 	
 	init(game: Game, infoDisplayStyle: InfoDisplayStyle) {
 		self.game = game
@@ -27,7 +29,7 @@ final class GameDetailModel: ObservableObject {
 
 struct GameDetailView: View {
 	
-	@ObservedObject var model: GameDetailModel
+	@Bindable var model: GameDetailModel
 	
     var body: some View {
 		

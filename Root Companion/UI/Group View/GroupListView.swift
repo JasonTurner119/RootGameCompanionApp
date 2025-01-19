@@ -11,21 +11,18 @@ import IdentifiedCollections
 import Combine
 
 @MainActor
-final class GroupListModel: ObservableObject {
+@Observable
+final class GroupListModel {
 	
-	@Published var destination: Destination?
-	@Published var groups: IdentifiedArrayOf<ObservedGroup> = [
-		ObservedGroup(group: .preview)
-	]
-	
-	private var cancellables: Set<AnyCancellable> = []
+	var destination: Destination?
+	var groups: [Shared<Group>] = [Shared(.preview)]
 	
 	@CasePathable
 	enum Destination {
 		case groupDetail(GroupDetailModel)
 	}
 	
-	func showDetail(for group: ObservedGroup) {
+	func showDetail(for group: Shared<Group>) {
 		let detailModel = GroupDetailModel(group: group)
 		destination = .groupDetail(detailModel)
 	}
@@ -34,7 +31,7 @@ final class GroupListModel: ObservableObject {
 
 struct GroupListView: View {
 	
-	@StateObject private var model = GroupListModel()
+	@Bindable private var model = GroupListModel()
 	
     var body: some View {
 		List(self.model.groups) { group in

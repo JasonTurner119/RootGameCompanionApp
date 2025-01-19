@@ -9,22 +9,23 @@ import SwiftUI
 import SwiftUINavigation
 
 @MainActor
-final class FactionSelectionMenuModel: ObservableObject {
+@Observable
+final class FactionSelectionMenuModel {
 	
-	@Published var destination: Destination?
-	@ObservedObject var group: ObservedGroup
-	@Binding var selectedFaction: Faction?
+	var destination: Destination?
+	let group: Shared<Group>
+	var selectedFaction: Shared<Faction?>
 	let disabledFactions: [Faction]
 	
 	init(
 		destination: Destination? = nil,
-		group: ObservedGroup,
-		selectedFaction: Binding<Faction?>,
+		group: Shared<Group>,
+		selectedFaction: Shared<Faction?>,
 		disabledFactions: [Faction]
 	) {
 		self.destination = destination
 		self.group = group
-		self._selectedFaction = selectedFaction
+		self.selectedFaction = selectedFaction
 		self.disabledFactions = disabledFactions
 	}
 	
@@ -45,13 +46,13 @@ final class FactionSelectionMenuModel: ObservableObject {
 
 struct FactionSelectionMenu: View {
 	
-	@ObservedObject var model: FactionSelectionMenuModel
+	@Bindable var model: FactionSelectionMenuModel
 	
 	@State private var isPresentingNewFactionView = false
 	
     var body: some View {
-		let title = self.model.selectedFaction?.name ?? "None"
-		SelectionMenu(title, selection: self.$model.selectedFaction) {
+		let title = self.model.selectedFaction.value?.name ?? "None"
+		SelectionMenu(title, selection: self.$model.selectedFaction.value) {
 			Text("None Selected")
 				.tag(nil as Faction?)
 			Divider()
@@ -84,8 +85,8 @@ struct FactionSelectionMenu: View {
 	NavigationStack {
 		FactionSelectionMenu(
 			model: FactionSelectionMenuModel(
-				group: ObservedGroup(group: .preview),
-				selectedFaction: $selectedFaction,
+				group: Shared(.preview),
+				selectedFaction: Shared(.eyrieDynasties),
 				disabledFactions: []
 			)
 		)

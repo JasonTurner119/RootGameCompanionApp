@@ -9,25 +9,26 @@ import SwiftUI
 import XCTestDynamicOverlay
 
 @MainActor
-final class RecordCreationModel: ObservableObject {
+@Observable
+final class RecordCreationModel {
 	
-	@ObservedObject var group: ObservedGroup
+	let group: Shared<Group>
 	let disabledPlayers: [Player]
 	let disabledFactions: [Faction]
-	@Published var player: Player? = nil
-	@Published var faction: Faction? = nil
-	@Published var score: Score
-	@Published var won: Bool = false
-	@Published var dissmissed: Bool = false
+	var player: Player? = nil
+	var faction: Shared<Faction?> = Shared(nil)
+	var score: Score
+	var won: Bool = false
+	var dissmissed: Bool = false
 	
 	var addRecord: (Game.PlayerRecord) -> Void = unimplemented("RecordCreationModel.addRecord")
 	
 	init(
-		group: ObservedGroup,
+		group: Shared<Group>,
 		disabledPlayers: [Player],
 		disabledFactions: [Faction],
 		player: Player? = nil,
-		faction: Faction? = nil,
+		faction: Shared<Faction?> = Shared(nil),
 		score: Score = .points(0),
 		won: Bool = false
 	) {
@@ -41,7 +42,7 @@ final class RecordCreationModel: ObservableObject {
 	}
 	
 	func submit() {
-		guard let player, let faction else { return }
+		guard let player, let faction = faction.value else { return }
 		let newRecord = Game.PlayerRecord(
 			player: player,
 			faction: faction,
@@ -53,14 +54,14 @@ final class RecordCreationModel: ObservableObject {
 	}
 	
 	var canSumbit: Bool {
-		player != nil && faction != nil
+		player != nil && faction.value != nil
 	}
 	
 }
 
 struct RecordCreationView: View {
 	
-	@ObservedObject var model: RecordCreationModel
+	@Bindable var model: RecordCreationModel
 	@Environment(\.dismiss) private var dismiss
 	
 	@State private var sliderValue: Double = 0.0
@@ -86,7 +87,7 @@ struct RecordCreationView: View {
 					FactionSelectionMenu(
 						model: FactionSelectionMenuModel(
 							group: self.model.group,
-							selectedFaction: self.$model.faction,
+							selectedFaction: self.model.faction,
 							disabledFactions: self.model.disabledFactions
 						)
 					)
@@ -139,7 +140,7 @@ struct RecordCreationView: View {
 	NavigationStack {
 		RecordCreationView(
 			model: RecordCreationModel(
-				group: ObservedGroup(group: .preview),
+				group: Shared(.preview),
 				disabledPlayers: [.emily],
 				disabledFactions: [.eyrieDynasties]
 			)

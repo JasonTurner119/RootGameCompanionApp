@@ -17,15 +17,6 @@ struct Group: Identifiable, Codable, Hashable {
 	var players: [Player]
 	var factions: [Faction]
 	
-	init(id: UUID, name: String, games: IdentifiedArrayOf<Game>, locations: [InPersonLocation], players: [Player], factions: [Faction]) {
-		self.id = id
-		self.name = name
-		self.games = games
-		self.locations = locations
-		self.players = players
-		self.factions = factions
-	}
-	
 }
 
 extension Group {

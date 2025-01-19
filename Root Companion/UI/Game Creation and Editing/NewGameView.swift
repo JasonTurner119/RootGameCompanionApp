@@ -9,17 +9,18 @@ import SwiftUI
 import SwiftUINavigation
 
 @MainActor
-final class NewGameModel: ObservableObject {
+@Observable
+final class NewGameModel {
 	
-	@Published var destination: Destination? {
+	var destination: Destination? {
 		didSet { self.bind() }
 	}
 	
-	@ObservedObject var group: ObservedGroup
-	@Published var game: Game
-	@Published var dismissed: Bool = false
+	var group: Shared<Group>
+	var game: Game
+	var dismissed: Bool = false
 	
-	init(destination: Destination? = nil, group: ObservedGroup, game: Game) {
+	init(destination: Destination? = nil, group: Shared<Group>, game: Game) {
 		self.destination = destination
 		self.group = group
 		self.game = game
@@ -61,7 +62,7 @@ final class NewGameModel: ObservableObject {
 
 struct NewGameView: View {
 	
-	@ObservedObject var model: NewGameModel
+	@Bindable var model: NewGameModel
 	@Environment(\.dismiss) private var dismiss
 	
     var body: some View {
@@ -134,7 +135,7 @@ struct NewGameView: View {
 	NavigationStack {
 		NewGameView(
 			model: NewGameModel(
-				group: ObservedGroup(group: .preview),
+				group: Shared(.preview),
 				game: .preview
 			)
 		)

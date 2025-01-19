@@ -8,14 +8,16 @@
 import SwiftUI
 import SwiftUINavigation
 import Combine
+import Observation
 
 @MainActor
-final class GroupDetailModel: ObservableObject {
+@Observable
+final class GroupDetailModel {
 	
-	@Published var destination: Destination?
-	@ObservedObject var group: ObservedGroup
+	var destination: Destination?
+	var group: Shared<Group>
 	
-	init(destination: Destination? = nil, group: ObservedGroup) {
+	init(destination: Destination? = nil, group: Shared<Group>) {
 		self.destination = destination
 		self.group = group
 	}
@@ -44,7 +46,7 @@ final class GroupDetailModel: ObservableObject {
 
 struct GroupDetailView: View {
 	
-	@ObservedObject var model: GroupDetailModel
+	@Bindable var model: GroupDetailModel
 	
     var body: some View {
 		List {
@@ -79,7 +81,7 @@ struct GroupDetailView: View {
 #Preview {
 	NavigationStack {
 		GroupDetailView(
-			model: GroupDetailModel(group: ObservedGroup(group: .preview))
+			model: GroupDetailModel(group: Shared(.preview))
 		)
 	}
 }

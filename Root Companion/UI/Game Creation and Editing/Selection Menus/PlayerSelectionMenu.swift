@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayerSelectionMenu: View {
 	
-	@ObservedObject var group: ObservedGroup
+	var group: Shared<Group>
 	let gamePlayers: [Player]
 	@Binding var selectedPlayer: Player?
 	@State var isPresentingNewPlayerView = false
@@ -73,7 +73,7 @@ struct PlayerSelectionMenu: View {
 	
 	NavigationStack {
 		PlayerSelectionMenu(
-			group: ObservedGroup(group: .preview),
+			group: Shared(.preview),
 			gamePlayers: [],
 			selectedPlayer: $selectedPlayer
 		)

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationSelectionMenu: View {
 	
-	@ObservedObject var group: ObservedGroup
+	var group: Shared<Group>
 	@Binding var selectedLocation: Location?
 	
 	@State private var isPresentingNewLocationView = false
@@ -59,7 +59,7 @@ struct LocationSelectionMenu: View {
 	
 	NavigationStack {
 		LocationSelectionMenu(
-			group: ObservedGroup(group: .preview),
+			group: Shared(.preview),
 			selectedLocation: $selectedLocation
 		)
 	}
