@@ -6,17 +6,19 @@
 //
 
 import Foundation
+import CasePaths
+import IdentifiedCollections
 
-struct Game: Identifiable, Codable {
+struct Game: Identifiable, Codable, Hashable {
 	var id: UUID
 	var name: String?
 	var location: Location?
-	var date: Date?
-	var playerRecords: [PlayerRecord]
+	var date: Date = Date()
+	var playerRecords: IdentifiedArrayOf<PlayerRecord>
 }
 
 extension Game {
-	struct PlayerRecord: Identifiable, Codable {
+	struct PlayerRecord: Identifiable, Codable, Hashable {
 		var player: Player
 		var faction: Faction
 		var score: Score
@@ -26,6 +28,7 @@ extension Game {
 }
 
 extension Game {
+	@CasePathable
 	enum Validity: Equatable {
 		case valid
 		case invalid(message: String)
@@ -87,12 +90,12 @@ extension Game {
 
 extension Game {
 	static var preview: Game {
-		[Game].preview.first!
+		IdentifiedArrayOf<Game>.preview.first!
 	}
 }
 
-extension [Game] {
-	static var preview: [Game] {
+extension IdentifiedArrayOf<Game> {
+	static var preview: IdentifiedArrayOf<Game> {
 		[
 			Game(
 				id: UUID(uuidString: "8074a1c2-a24b-492f-8edc-616641883b4b")!,

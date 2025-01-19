@@ -9,29 +9,26 @@ import SwiftUI
 
 struct PlayerSelectionMenu: View {
 	
-	@Bindable var group: Group
+	@ObservedObject var group: ObservedGroup
 	let gamePlayers: [Player]
 	@Binding var selectedPlayer: Player?
 	@State var isPresentingNewPlayerView = false
 	
     var body: some View {
 		
-		Menu(selectedPlayer?.name ?? "None") {
+		let title = selectedPlayer?.name ?? "None"
+		
+		SelectionMenu(title, selection: $selectedPlayer) {
 			
-			Toggle(isOn: selectedPlayer(is: nil)) {
-				Text("None Selected")
-			}
+			Text("None Selected")
+				.tag(nil as Player?)
 			
 			Divider()
 			
 			ForEach(group.players) { player in
-				Toggle(isOn: selectedPlayer(is: player)) {
-					Text(player.name)
-				}
-				.disabled(
-					gamePlayers.contains(player)
-					&& selectedPlayer?.id != player.id
-				)
+				Text(player.name)
+					.tag(player)
+					.containerValue(\.selectionEnabled, enable(player: player))
 			}
 			
 			Divider()
@@ -42,9 +39,8 @@ struct PlayerSelectionMenu: View {
 			}
 			
 		}
-		.menuOrder(.fixed)
 		.navigationDestination(isPresented: $isPresentingNewPlayerView) {
-			PlayerCreationView()
+			NotYetImplementedView()
 		}
 		
     }
@@ -65,16 +61,19 @@ struct PlayerSelectionMenu: View {
 		isPresentingNewPlayerView = true
 	}
 	
+	private func enable(player: Player) -> Bool {
+		!gamePlayers.contains(player) || selectedPlayer?.id == player.id
+	}
+	
 }
 
 #Preview {
 	
 	@Previewable @State var selectedPlayer: Player? = nil
-	let group: Group = .preview
 	
 	NavigationStack {
 		PlayerSelectionMenu(
-			group: group,
+			group: ObservedGroup(group: .preview),
 			gamePlayers: [],
 			selectedPlayer: $selectedPlayer
 		)

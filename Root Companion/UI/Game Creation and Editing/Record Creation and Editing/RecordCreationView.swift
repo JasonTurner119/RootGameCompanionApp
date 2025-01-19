@@ -6,115 +6,143 @@
 //
 
 import SwiftUI
+import XCTestDynamicOverlay
+
+@MainActor
+class RecordCreationModel: ObservableObject {
+	
+	@ObservedObject var group: ObservedGroup
+	let disabledPlayers: [Player]
+	let disabledFactions: [Faction]
+	@Published var player: Player? = nil
+	@Published var faction: Faction? = nil
+	@Published var score: Score
+	@Published var won: Bool = false
+	@Published var dissmissed: Bool = false
+	
+	var addRecord: (Game.PlayerRecord) -> Void = unimplemented("RecordCreationModel.addRecord")
+	
+	init(
+		group: ObservedGroup,
+		disabledPlayers: [Player],
+		disabledFactions: [Faction],
+		player: Player? = nil,
+		faction: Faction? = nil,
+		score: Score = .points(0),
+		won: Bool = false
+	) {
+		self.group = group
+		self.disabledPlayers = disabledPlayers
+		self.disabledFactions = disabledFactions
+		self.player = player
+		self.faction = faction
+		self.score = score
+		self.won = won
+	}
+	
+	func submit() {
+		guard let player, let faction else { return }
+		let newRecord = Game.PlayerRecord(
+			player: player,
+			faction: faction,
+			score: score,
+			didWin: score == .points(30) || (score.isDominance && won)
+		)
+		self.addRecord(newRecord)
+		self.dissmissed = true
+	}
+	
+	var canSumbit: Bool {
+		player != nil && faction != nil
+	}
+	
+}
 
 struct RecordCreationView: View {
 	
-	@Bindable var group: Group
+	@ObservedObject var model: RecordCreationModel
+	@Environment(\.dismiss) private var dismiss
 	
-	@Binding var gameRecords: [Game.PlayerRecord]
+	@State private var sliderValue: Double = 0.0
 	
-	@State private var player: Player?
-	@State private var faction: Faction?
-	
-	@State private var score = 0.0
-	
-	@State private var playedDominance = false
-	@State private var wonWithDominance = false
-	
-	@Environment(\.dismiss) private var dismiss: DismissAction
-	
-	private var submitDisabled: Bool {
-		player == nil || faction == nil
+	private var playedDominance: Binding<Bool> {
+		Binding(
+			get: { self.model.score.isDominance },
+			set: { self.model.score = $0 ? .dominance : .points(0) }
+		)
 	}
 	
     var body: some View {
-		
 		Form {
-			
 			Section {
 				LabeledContent("Player") {
 					PlayerSelectionMenu(
-						group: group,
-						gamePlayers: gameRecords.map(\.player),
-						selectedPlayer: $player
+						group: self.model.group,
+						gamePlayers: self.model.disabledPlayers,
+						selectedPlayer: self.$model.player
 					)
 				}
-				
 				LabeledContent("Faction") {
 					FactionSelectionMenu(
-						group: group,
-						gameFactions: gameRecords.map(\.faction),
-						selectedFaction: $faction
+						model: FactionSelectionMenuModel(
+							group: self.model.group,
+							selectedFaction: self.$model.faction,
+							disabledFactions: self.model.disabledFactions
+						)
 					)
 				}
-				
-				Toggle(isOn: $playedDominance.animation()) {
+				Toggle(isOn: playedDominance) {
 					Text("Played Dominance")
 				}
-				
 			}
-			
 			Section {
-				
-				if playedDominance {
-					Toggle(isOn: $wonWithDominance) {
+				switch self.model.score {
+				case .dominance:
+					Toggle(isOn: self.$model.won) {
 						Text("Won with Dominance")
 					}
-				} else {
+				case .points(let points):
 					VStack {
 						LabeledContent("Score") {
-							let points = String(Int(score))
-							Text(points)
+							Text("\(points)")
 						}
 						Slider(
-							value: $score,
+							value: $sliderValue,
 							in: 0...30,
 							step: 1
 						)
+						.onChange(of: sliderValue) { self.model.score = .points(Int(sliderValue)) }
 					}
 				}
 			}
-			
 			Section {
-				Button(action: submit) {
+				Button(action: { self.model.submit() }) {
 					HStack(alignment: .center) {
 						Text("Submit")
 							.bold()
 							.frame(maxWidth: .infinity)
 					}
 				}
-				.disabled(submitDisabled)
+				.disabled(!self.model.canSumbit)
 			}
 			
 		}
 		.navigationTitle("Add Player")
+		.onChange(of: self.model.dissmissed) { self.dismiss() }
 		
     }
-	
-	private func submit() {
-		guard let player, let faction else { return }
-		let points = Int(score)
-		let newRecord = Game.PlayerRecord(
-			player: player,
-			faction: faction,
-			score: playedDominance ? .dominance : .points(points),
-			didWin: playedDominance ? wonWithDominance : points == 30
-		)
-		gameRecords.append(newRecord)
-		dismiss()
-	}
 	
 }
 
 #Preview {
 	
-	@Previewable @State var gameRecords: [Game.PlayerRecord] = []
-	let group: Group = .preview
-	
 	NavigationStack {
 		RecordCreationView(
-			group: group,
-			gameRecords: $gameRecords
+			model: RecordCreationModel(
+				group: ObservedGroup(group: .preview),
+				disabledPlayers: [.emily],
+				disabledFactions: [.eyrieDynasties]
+			)
 		)
 	}
 	

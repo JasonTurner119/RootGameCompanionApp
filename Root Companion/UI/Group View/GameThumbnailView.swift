@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IdentifiedCollections
 
 struct GameThumbnailView: View {
 	
@@ -13,9 +14,7 @@ struct GameThumbnailView: View {
 	
     var body: some View {
 		VStack(alignment: .leading) {
-			if let date = game.date {
-				dateView(for: date)
-			}
+			dateView(for: game.date)
 			if let location = game.location {
 				locationView(for: location)
 			}
@@ -40,8 +39,15 @@ struct GameThumbnailView: View {
 
 #Preview {
 	NavigationStack {
-		List([Game].preview) { game in
-			NavigationLink(destination: GameView(game: game)) {
+		List(IdentifiedArrayOf<Game>.preview) { game in
+			NavigationLink(
+				destination: GameDetailView(
+					model: GameDetailModel(
+						game: .preview,
+						infoDisplayStyle: .chart
+					)
+				)
+			) {
 				GameThumbnailView(game: game)
 			}
 		}

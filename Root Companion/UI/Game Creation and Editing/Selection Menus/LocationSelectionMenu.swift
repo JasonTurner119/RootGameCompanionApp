@@ -9,38 +9,31 @@ import SwiftUI
 
 struct LocationSelectionMenu: View {
 	
-	@Bindable var group: Group
+	@ObservedObject var group: ObservedGroup
 	@Binding var selectedLocation: Location?
 	
 	@State private var isPresentingNewLocationView = false
 	
     var body: some View {
         
-		Menu(selectedLocation?.description ?? "None") {
+		let title = selectedLocation?.description ?? "None"
+		
+		SelectionMenu(title, selection: $selectedLocation) {
 			
-			Toggle(
-				"Online",
-				isOn: $selectedLocation[is: .online]
-			)
-			.tag(Location.online)
+			Text("None")
+				.tag(nil as Location?)
+			
+			Divider()
+			
+			Text("Online")
+				.tag(Location.online)
 			
 			Divider()
 			
 			ForEach(group.locations) { location in
-				Toggle(
-					location.name,
-					isOn: $selectedLocation[
-						is: .inPerson(location)
-					]
-				)
+				Text(location.name)
+					.tag(Location.inPerson(location))
 			}
-			
-			Divider()
-			
-			Toggle(
-				"None",
-				isOn: $selectedLocation[is: nil]
-			)
 			
 			Divider()
 			
@@ -49,9 +42,8 @@ struct LocationSelectionMenu: View {
 			}
 			
 		}
-		.menuOrder(.fixed)
 		.navigationDestination(isPresented: $isPresentingNewLocationView) {
-			LocationCreationView()
+			NotYetImplementedView()
 		}
 		
     }
@@ -61,39 +53,14 @@ struct LocationSelectionMenu: View {
 	}
 	
 }
-				   
-extension Location? {
-	subscript (is location: Location?) -> Bool {
-		get {
-			switch (self, location) {
-			case (nil, nil):
-				true
-			case (.online, .online):
-				true
-			case (.inPerson(let l), .inPerson(let r)):
-				l.id == r.id
-			default:
-				false
-			}
-		}
-		set {
-			if newValue {
-				self = location
-			}
-		}
-	}
-}
 
 #Preview {
-	
 	@Previewable @State var selectedLocation: Location? = nil
-	let group: Group = .preview
 	
 	NavigationStack {
 		LocationSelectionMenu(
-			group: group,
+			group: ObservedGroup(group: .preview),
 			selectedLocation: $selectedLocation
 		)
 	}
-	
 }

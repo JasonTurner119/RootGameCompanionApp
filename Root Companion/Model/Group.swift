@@ -6,19 +6,18 @@
 //
 
 import Foundation
-import SwiftData
+import IdentifiedCollections
 
-@Model
-class Group {
+struct Group: Identifiable, Codable, Hashable {
 	
 	var id: UUID
 	var name: String
-	var games: [Game]
+	var games: IdentifiedArrayOf<Game>
 	var locations: [InPersonLocation]
 	var players: [Player]
 	var factions: [Faction]
 	
-	init(id: UUID, name: String, games: [Game], locations: [InPersonLocation], players: [Player], factions: [Faction]) {
+	init(id: UUID, name: String, games: IdentifiedArrayOf<Game>, locations: [InPersonLocation], players: [Player], factions: [Faction]) {
 		self.id = id
 		self.name = name
 		self.games = games

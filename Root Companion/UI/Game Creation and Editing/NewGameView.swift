@@ -6,107 +6,136 @@
 //
 
 import SwiftUI
+import SwiftUINavigation
+
+class NewGameModel: ObservableObject {
+	
+	@Published var destination: Destination? {
+		didSet { self.bind() }
+	}
+	
+	@ObservedObject var group: ObservedGroup
+	@Published var game: Game
+	@Published var dismissed: Bool = false
+	
+	init(destination: Destination? = nil, group: ObservedGroup, game: Game) {
+		self.destination = destination
+		self.group = group
+		self.game = game
+		bind()
+	}
+	
+	@CasePathable
+	enum Destination {
+		case addPlayer(RecordCreationModel)
+	}
+	
+	func createGame() {
+		guard self.game.validity == .valid else { return }
+		self.group.games.append(self.game)
+		self.dismissed = true
+	}
+	
+	func addPlayerButtonPressed() {
+		let recordCreationModel = RecordCreationModel(
+			group: self.group,
+			disabledPlayers: game.playerRecords.map(\.player),
+			disabledFactions: game.playerRecords.map(\.faction)
+		)
+		self.destination = .addPlayer(recordCreationModel)
+	}
+	
+	private func bind() {
+		switch self.destination {
+		case .addPlayer(let recordCreationModel):
+			recordCreationModel.addRecord = { [weak self] in
+				self?.game.playerRecords.append($0)
+			}
+		case .none:
+			break
+		}
+	}
+	
+}
 
 struct NewGameView: View {
 	
-	@Bindable var group: Group
-	
-	private let gameId = UUID()
-	@State private var date: Date = .now
-	@State private var location: Location? = nil
-	@State private var records: [Game.PlayerRecord] = []
-	
-	@Environment(\.dismiss) private var dismiss: DismissAction
-	
-	private var gameHasWinner: Bool {
-		records.map(\.didWin).contains(true)
-	}
-	
-	private var game: Game {
-		Game(
-			id: gameId,
-			name: nil,
-			location: location,
-			date: date,
-			playerRecords: records
-		)
-	}
-	
-	private var createGameIsDisabled: Bool {
-		game.validity != .valid
-	}
-	
-	private var createGameFooterString: String {
-		switch game.validity {
-		case .valid:
-			return "Add game to group's history."
-		case .invalid(let reason):
-			return reason
-		}
-	}
+	@ObservedObject var model: NewGameModel
+	@Environment(\.dismiss) private var dismiss
 	
     var body: some View {
-        
 		Form {
-			
 			Section("General") {
-				
-				DatePicker(
-					"Date",
-					selection: $date,
-					displayedComponents: .date
-				)
-				
-				LabeledContent("Location") {
-					LocationSelectionMenu(
-						group: group,
-						selectedLocation: $location
-					)
-				}
-				
+				generalSection
 			}
-			
 			Section("Players") {
-				GameRecordsEditView(
-					group: group,
-					records: $records
-				)
+				playersSection
 			}
-			
-			Section(
-				content: {
-					Button(action: createGame) {
-						Text("Create Game")
-					}
-					.disabled(createGameIsDisabled)
-				},
-				footer: {
-					Text(createGameFooterString)
-				}
-			)
-			
+			createGameButton
 		}
 		.navigationTitle("New Game")
-		
+		.onChange(of: self.model.dismissed) { self.dismiss() }
+		.navigationDestination(item: self.$model.destination.addPlayer) { addPlayerModel in
+			RecordCreationView(model: addPlayerModel)
+		}
     }
 	
-	private func createGame() {
-		guard game.validity == .valid else {
-			assertionFailure("Game must be valid to be added.")
-			return
+	@ViewBuilder
+	private var generalSection: some View {
+		DatePicker(
+			"Date",
+			selection: self.$model.game.date,
+			displayedComponents: .date
+		)
+		LabeledContent("Location") {
+			LocationSelectionMenu(
+				group: self.model.group,
+				selectedLocation: self.$model.game.location
+			)
 		}
-		group.games.append(game)
-		dismiss()
+	}
+	
+	@ViewBuilder
+	private var playersSection: some View {
+		ForEach(self.$model.game.playerRecords, editActions: .delete) { $record in
+			HStack {
+				Text(record.player.name)
+				if record.didWin {
+					Text("🎉")
+				}
+				Spacer()
+				Text(record.faction.name)
+					.foregroundStyle(record.faction.color)
+			}
+		}
+		Button(action: { self.model.addPlayerButtonPressed() }) {
+			Text("Add Player")
+		}
+	}
+	
+	@ViewBuilder
+	private var createGameButton: some View {
+		Section {
+			Button(action: { self.model.createGame() } ) {
+				Text("Create Game")
+			}
+			.disabled(self.model.game.validity.is(\.invalid))
+		} footer: {
+			if case .invalid(let reason) = self.model.game.validity {
+				Text(reason)
+			}
+		}
 	}
 	
 }
 
 #Preview {
-	
-	let group: Group = .preview
-	
 	NavigationStack {
-		NewGameView(group: group)
+		NewGameView(
+			model: NewGameModel(
+				group: ObservedGroup(group: .preview),
+				game: .preview
+			)
+		)
 	}
-	
 }

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import IdentifiedCollections
 
 struct PlayerRecordSummaryView: View {
 	
-	let playerRecords: [Game.PlayerRecord]
+	let playerRecords: IdentifiedArrayOf<Game.PlayerRecord>
 	
     var body: some View {
 		

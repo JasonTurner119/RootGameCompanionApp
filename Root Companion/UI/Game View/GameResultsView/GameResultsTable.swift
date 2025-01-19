@@ -6,21 +6,11 @@
 //
 
 import SwiftUI
+import IdentifiedCollections
 
-extension Score {
-	var description: String {
-		switch self {
-		case .points(let points):
-			return "\(points)"
-		case .dominance:
-			return ""
-		}
-	}
-}
-
-struct SingleGameTable: View {
+struct GameResultsTable: View {
 	
-	let playerRecords: [Game.PlayerRecord]
+	let playerRecords: IdentifiedArrayOf<Game.PlayerRecord>
 	
     var body: some View {
 		VStack {
@@ -37,9 +27,7 @@ struct SingleGameTable: View {
 					GridRow {
 						Text(playerRecord.player.name)
 						Text(playerRecord.faction.name)
-							.foregroundStyle(
-								Color.primary.mix(with: playerRecord.faction.color, by: 0.8)
-							)
+							.foregroundStyle(playerRecord.faction.color)
 						Text(playerRecord.score.description)
 							.gridColumnAlignment(.center)
 						Text(playerRecord.didWin ? "🎉" : " ")
@@ -56,6 +44,6 @@ struct SingleGameTable: View {
 }
 
 #Preview {
-	SingleGameTable(playerRecords: Game.preview.playerRecords)
+	GameResultsTable(playerRecords: Game.preview.playerRecords)
 		.padding()
 }

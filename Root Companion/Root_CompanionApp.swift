@@ -14,6 +14,5 @@ struct Root_CompanionApp: App {
         WindowGroup {
             ContentView()
         }
-		.modelContainer(for: Group.self)
     }
 }

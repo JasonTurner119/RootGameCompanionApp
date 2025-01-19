@@ -6,81 +6,87 @@
 //
 
 import SwiftUI
+import SwiftUINavigation
 
-struct FactionSelectionMenu: View {
+class FactionSelectionMenuModel: ObservableObject {
 	
-	@Bindable var group: Group
-	let gameFactions: [Faction]
+	@Published var destination: Destination?
+	@ObservedObject var group: ObservedGroup
 	@Binding var selectedFaction: Faction?
+	let disabledFactions: [Faction]
 	
-	@State private var isPresentingNewFactionView = false
+	init(
+		destination: Destination? = nil,
+		group: ObservedGroup,
+		selectedFaction: Binding<Faction?>,
+		disabledFactions: [Faction]
+	) {
+		self.destination = destination
+		self.group = group
+		self._selectedFaction = selectedFaction
+		self.disabledFactions = disabledFactions
+	}
 	
-    var body: some View {
-		
-		Menu(selectedFaction?.name ?? "None") {
-			
-			Toggle(isOn: $selectedFaction[is: nil]) {
-				Text("None Selected")
-			}
-			
-			Divider()
-			
-			ForEach(group.factions) { faction in
-				Toggle(isOn: $selectedFaction[is: faction]) {
-					Text(faction.name)
-				}
-				.disabled(
-					gameFactions.contains(faction)
-					&& selectedFaction?.id != faction.id
-				)
-			}
-			
-			Divider()
-			
-			Button(action: presentNewFactionView) {
-				Text("New Faction")
-				Image(systemName: "plus")
-			}
-			
-		}
-		.menuOrder(.fixed)
-		.navigationDestination(isPresented: $isPresentingNewFactionView) {
-			FactionCreationView()
-		}
-		
-    }
+	@CasePathable
+	enum Destination {
+		case newFaction
+	}
 	
-	private func presentNewFactionView() {
-		isPresentingNewFactionView = true
+	func newFactionButtonPressed() {
+		self.destination = .newFaction
+	}
+	
+	func isEnabled(faction: Faction) -> Bool {
+		!self.disabledFactions.contains(faction)
 	}
 	
 }
 
-extension Faction? {
+struct FactionSelectionMenu: View {
 	
-	subscript (is faction: Faction?) -> Bool {
-		get {
-			return self?.id == faction?.id
-		}
-		set {
-			if newValue {
-				self = faction
+	@ObservedObject var model: FactionSelectionMenuModel
+	
+	@State private var isPresentingNewFactionView = false
+	
+    var body: some View {
+		let title = self.model.selectedFaction?.name ?? "None"
+		SelectionMenu(title, selection: self.$model.selectedFaction) {
+			Text("None Selected")
+				.tag(nil as Faction?)
+			Divider()
+			ForEach(self.model.group.factions) { faction in
+				Text(faction.name)
+					.tag(faction)
+					.containerValue(
+						\.selectionEnabled,
+						 self.model.isEnabled(faction: faction)
+					)
+			}
+			Divider()
+			Button(action: { self.model.newFactionButtonPressed() }) {
+				Text("New Faction")
+				Image(systemName: "plus")
 			}
 		}
-	}
+		.navigationDestination(isPresented: $isPresentingNewFactionView) {
+			NotYetImplementedView()
+		}
+    }
 	
 }
 
 #Preview {
 	
 	@Previewable @State var selectedFaction: Faction? = nil
-	let group: Group = .preview
+	@Previewable @State var group: Group = .preview
 	
 	NavigationStack {
 		FactionSelectionMenu(
-			group: group,
-			gameFactions: [],
-			selectedFaction: $selectedFaction
+			model: FactionSelectionMenuModel(
+				group: ObservedGroup(group: .preview),
+				selectedFaction: $selectedFaction,
+				disabledFactions: []
+			)
 		)
 	}
 	

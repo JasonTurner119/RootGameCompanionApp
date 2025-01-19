@@ -25,4 +25,21 @@ extension Score {
 		case .dominance: false
 		}
 	}
+	var points: Int? {
+		switch self {
+		case .points(let points): points
+		case .dominance: nil
+		}
+	}
+}
+
+extension Score {
+	var description: String {
+		switch self {
+		case .points(let points):
+			return "\(points)"
+		case .dominance:
+			return ""
+		}
+	}
 }

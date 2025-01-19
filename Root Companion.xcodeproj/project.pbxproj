@@ -6,8 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F48DF31B2D3C383700CFDF84 /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F48DF31A2D3C383700CFDF84 /* SwiftNavigation */; };
+		F48DF31D2D3C383700CFDF84 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F48DF31C2D3C383700CFDF84 /* SwiftUINavigation */; };
+		F48DF3202D3C446D00CFDF84 /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = F48DF31F2D3C446D00CFDF84 /* IdentifiedCollections */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F48DF32D2D3C808F00CFDF84 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F41E2A852D16294C00F5CA37 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F41E2A8C2D16294C00F5CA37;
+			remoteInfo = "Root Companion";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		F41E2A8D2D16294C00F5CA37 /* Root Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Root Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F48DF3292D3C808F00CFDF84 /* Root Companion Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Root Companion Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +33,25 @@
 			path = "Root Companion";
 			sourceTree = "<group>";
 		};
+		F48DF32A2D3C808F00CFDF84 /* Root Companion Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Root Companion Tests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		F41E2A8A2D16294C00F5CA37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F48DF3202D3C446D00CFDF84 /* IdentifiedCollections in Frameworks */,
+				F48DF31D2D3C383700CFDF84 /* SwiftUINavigation in Frameworks */,
+				F48DF31B2D3C383700CFDF84 /* SwiftNavigation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F48DF3262D3C808F00CFDF84 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				F41E2A8F2D16294C00F5CA37 /* Root Companion */,
+				F48DF32A2D3C808F00CFDF84 /* Root Companion Tests */,
 				F41E2A8E2D16294C00F5CA37 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				F41E2A8D2D16294C00F5CA37 /* Root Companion.app */,
+				F48DF3292D3C808F00CFDF84 /* Root Companion Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,10 +99,36 @@
 			);
 			name = "Root Companion";
 			packageProductDependencies = (
+				F48DF31A2D3C383700CFDF84 /* SwiftNavigation */,
+				F48DF31C2D3C383700CFDF84 /* SwiftUINavigation */,
+				F48DF31F2D3C446D00CFDF84 /* IdentifiedCollections */,
 			);
 			productName = "Root Companion";
 			productReference = F41E2A8D2D16294C00F5CA37 /* Root Companion.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F48DF3282D3C808F00CFDF84 /* Root Companion Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F48DF32F2D3C808F00CFDF84 /* Build configuration list for PBXNativeTarget "Root Companion Tests" */;
+			buildPhases = (
+				F48DF3252D3C808F00CFDF84 /* Sources */,
+				F48DF3262D3C808F00CFDF84 /* Frameworks */,
+				F48DF3272D3C808F00CFDF84 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F48DF32E2D3C808F00CFDF84 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F48DF32A2D3C808F00CFDF84 /* Root Companion Tests */,
+			);
+			name = "Root Companion Tests";
+			packageProductDependencies = (
+			);
+			productName = "Root Companion Tests";
+			productReference = F48DF3292D3C808F00CFDF84 /* Root Companion Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -83,6 +143,10 @@
 					F41E2A8C2D16294C00F5CA37 = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					F48DF3282D3C808F00CFDF84 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = F41E2A8C2D16294C00F5CA37;
+					};
 				};
 			};
 			buildConfigurationList = F41E2A882D16294C00F5CA37 /* Build configuration list for PBXProject "Root Companion" */;
@@ -94,18 +158,30 @@
 			);
 			mainGroup = F41E2A842D16294C00F5CA37;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F48DF3192D3C376100CFDF84 /* XCRemoteSwiftPackageReference "swift-navigation" */,
+				F48DF31E2D3C446D00CFDF84 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F41E2A8E2D16294C00F5CA37 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				F41E2A8C2D16294C00F5CA37 /* Root Companion */,
+				F48DF3282D3C808F00CFDF84 /* Root Companion Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F41E2A8B2D16294C00F5CA37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F48DF3272D3C808F00CFDF84 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +198,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F48DF3252D3C808F00CFDF84 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F48DF32E2D3C808F00CFDF84 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F41E2A8C2D16294C00F5CA37 /* Root Companion */;
+			targetProxy = F48DF32D2D3C808F00CFDF84 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F41E2A992D16294C00F5CA37 /* Debug */ = {
@@ -304,6 +395,42 @@
 			};
 			name = Release;
 		};
+		F48DF3302D3C808F00CFDF84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 64Q9YVZ5VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "turner.jason.Root-Companion-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Root Companion.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Root Companion";
+			};
+			name = Debug;
+		};
+		F48DF3312D3C808F00CFDF84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 64Q9YVZ5VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "turner.jason.Root-Companion-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Root Companion.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Root Companion";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -325,7 +452,53 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F48DF32F2D3C808F00CFDF84 /* Build configuration list for PBXNativeTarget "Root Companion Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F48DF3302D3C808F00CFDF84 /* Debug */,
+				F48DF3312D3C808F00CFDF84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F48DF3192D3C376100CFDF84 /* XCRemoteSwiftPackageReference "swift-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-navigation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.3;
+			};
+		};
+		F48DF31E2D3C446D00CFDF84 /* XCRemoteSwiftPackageReference "swift-identified-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-identified-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F48DF31A2D3C383700CFDF84 /* SwiftNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F48DF3192D3C376100CFDF84 /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftNavigation;
+		};
+		F48DF31C2D3C383700CFDF84 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F48DF3192D3C376100CFDF84 /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftUINavigation;
+		};
+		F48DF31F2D3C446D00CFDF84 /* IdentifiedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F48DF31E2D3C446D00CFDF84 /* XCRemoteSwiftPackageReference "swift-identified-collections" */;
+			productName = IdentifiedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F41E2A852D16294C00F5CA37 /* Project object */;
 }

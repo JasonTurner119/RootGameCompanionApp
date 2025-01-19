@@ -6,37 +6,55 @@
 //
 
 import SwiftUI
-import SwiftData
+import SwiftUINavigation
+import IdentifiedCollections
+import Combine
+
+@MainActor
+class GroupListModel: ObservableObject {
+	
+	@Published var destination: Destination?
+	@Published var groups: IdentifiedArrayOf<ObservedGroup> = [
+		ObservedGroup(group: .preview)
+	]
+	
+	private var cancellables: Set<AnyCancellable> = []
+	
+	@CasePathable
+	enum Destination {
+		case groupDetail(GroupDetailModel)
+	}
+	
+	func showDetail(for group: ObservedGroup) {
+		let detailModel = GroupDetailModel(group: group)
+		destination = .groupDetail(detailModel)
+	}
+	
+}
 
 struct GroupListView: View {
 	
-	@Query var groups: [Group]
-	@Environment(\.modelContext) var modelContext
+	@StateObject private var model = GroupListModel()
 	
     var body: some View {
-        
-		List(groups) { group in
-			NavigationLink(value: group) {
-				Text(group.name)
+		List(self.model.groups) { group in
+			Button(action: { self.model.showDetail(for: group) }) {
+				VStack {
+					Text(group.name)
+					Text("\(group.games.count) Games")
+				}
 			}
 		}
 		.navigationTitle("Groups")
-		.navigationDestination(for: Group.self) { group in
-			GroupGameListView(group: group)
+		.navigationDestination(item: self.$model.destination.groupDetail) { detailModel in
+			GroupDetailView(model: detailModel)
 		}
-		.onAppear {
-			modelContext.insert(Group.preview)
-		}
-		
     }
 	
 }
 
 #Preview {
-	
 	NavigationStack {
 		GroupListView()
 	}
-	.modelContainer(for: Group.self)
-	
 }
