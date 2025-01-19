@@ -42,7 +42,7 @@ struct Root_Companion_Tests {
 		#expect(!addPlayerModel.canSumbit)
 		
 		addPlayerModel.player = .jason
-		addPlayerModel.faction = .woodlandAlliance
+		addPlayerModel.faction.value = .woodlandAlliance
 		addPlayerModel.score = .points(30)
 		
 		#expect(addPlayerModel.canSumbit)
