@@ -8,25 +8,6 @@
 import SwiftUI
 import Charts
 
-@MainActor
-@Observable
-final class GameDetailModel {
-	
-	let game: Game
-	var infoDisplayStyle: InfoDisplayStyle
-	
-	init(game: Game, infoDisplayStyle: InfoDisplayStyle) {
-		self.game = game
-		self.infoDisplayStyle = infoDisplayStyle
-	}
-	
-	enum InfoDisplayStyle {
-		case chart
-		case table
-	}
-	
-}
-
 struct GameDetailView: View {
 	
 	@Bindable var model: GameDetailModel
@@ -36,8 +17,9 @@ struct GameDetailView: View {
 		ScrollView {
 			VStack(alignment: .leading) {
 				
-				DateView(date: self.model.game.date)
-					.padding(.horizontal, 5)
+				let date = self.model.game.date
+				Text(date.formatted(date: .long, time: .omitted))
+					.font(.subheadline)
 				
 				GroupBox {
 					GameResultsView(

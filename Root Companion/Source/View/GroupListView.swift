@@ -7,27 +7,6 @@
 
 import SwiftUI
 import SwiftUINavigation
-import IdentifiedCollections
-import Combine
-
-@MainActor
-@Observable
-final class GroupListModel {
-	
-	var destination: Destination?
-	var groups: [Shared<Group>] = [Shared(.preview)]
-	
-	@CasePathable
-	enum Destination {
-		case groupDetail(GroupDetailModel)
-	}
-	
-	func showDetail(for group: Shared<Group>) {
-		let detailModel = GroupDetailModel(group: group)
-		destination = .groupDetail(detailModel)
-	}
-	
-}
 
 struct GroupListView: View {
 	

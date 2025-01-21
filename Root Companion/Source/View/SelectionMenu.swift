@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-extension ContainerValues {
-	@Entry var selectionEnabled: Bool = true
-}
-
 struct SelectionMenu<Selection: Hashable, Content: View>: View {
 	
 	private let title: String
@@ -46,12 +42,16 @@ struct SelectionMenu<Selection: Hashable, Content: View>: View {
 }
 
 extension ContainerValues {
+	@Entry var selectionEnabled: Bool = true
+}
+
+private extension ContainerValues {
 	func wrappedTag<T: Hashable>(for _: T.Type = T.self) -> T? {
 		tag(for: T?.self) ?? tag(for: T.self)
 	}
 }
 
-extension Optional where Wrapped: Hashable {
+private extension Optional where Wrapped: Hashable {
 	subscript (equals value: Self) -> Bool {
 		get { return self == value }
 		set { self = newValue ? value : nil }

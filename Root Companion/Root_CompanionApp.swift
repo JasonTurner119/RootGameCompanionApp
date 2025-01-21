@@ -12,7 +12,9 @@ import SwiftData
 struct Root_CompanionApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+			NavigationStack {
+				GroupListView()
+			}
         }
     }
 }
